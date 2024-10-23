@@ -1,16 +1,9 @@
-FROM ubuntu:latest AS build
-LABEL authors="Fabiano SSantos"
+FROM maven:3.9.9-eclipse-temurin-17-alpine AS build
+COPY . .
+RUN mvn package -DskipTests
 
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
-COPY src .
-
-RUN apt-get install maven -y
-RUN mvn clean install
-
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-alpine
+COPY --from=build /target/teste-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 
-COPY --from=build /target/teste-0.0.1-SNAPSHOT.jar app.jar
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar"]
