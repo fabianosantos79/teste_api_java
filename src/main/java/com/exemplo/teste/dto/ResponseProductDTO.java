@@ -1,4 +1,4 @@
 package com.exemplo.teste.dto;
 
-public record RequestProductDTO(String name, int price ) {
+public record ResponseProductDTO(String name, int price ) {
 }

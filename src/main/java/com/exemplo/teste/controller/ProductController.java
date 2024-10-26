@@ -1,18 +1,16 @@
 package com.exemplo.teste.controller;
 
-import com.exemplo.teste.domain.Product;
-import com.exemplo.teste.dto.RequestProductDTO;
+import com.exemplo.teste.dto.RequestProductoDTO;
+import com.exemplo.teste.dto.ResponseProductDTO;
 import com.exemplo.teste.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,16 +26,26 @@ public class ProductController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso")
     })
-    @GetMapping
-    public ResponseEntity<List<RequestProductDTO>> getAllProduct(){
 
-        List<RequestProductDTO> requestProductDTO = productService.getAllProduct()
+    @GetMapping
+    public ResponseEntity<List<ResponseProductDTO>> getAllProduct(){
+
+        List<ResponseProductDTO> responseProductDTO = productService.getAllProduct()
                 .stream()
-                .map(product -> new RequestProductDTO(
+                .map(product -> new ResponseProductDTO(
                         product.getName(),
                         product.getPrice())).
                 collect(Collectors.toList());
 
-        return new ResponseEntity<>(requestProductDTO, HttpStatus.OK);
+        return ResponseEntity.ok(responseProductDTO);
     }
+
+
+    @PostMapping
+    @Transactional
+    public ResponseEntity saveProduct(@RequestBody RequestProductoDTO data){
+        productService.saveProduct(data);
+        return ResponseEntity.ok().build();
+    }
+
 }
