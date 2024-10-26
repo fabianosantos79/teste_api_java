@@ -18,7 +18,7 @@ public class ProductService {
     }
 
     public void saveProduct(RequestProductoDTO data){
-        Product product = new Product(data);
+        var product = new Product(data);
         productRepository.save(product);
     }
 }

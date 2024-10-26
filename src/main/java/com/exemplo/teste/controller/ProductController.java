@@ -1,7 +1,9 @@
 package com.exemplo.teste.controller;
 
+import com.exemplo.teste.domain.Product;
 import com.exemplo.teste.dto.RequestProductoDTO;
 import com.exemplo.teste.dto.ResponseProductDTO;
+import com.exemplo.teste.repository.ProductRepository;
 import com.exemplo.teste.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,6 +23,9 @@ import java.util.stream.Collectors;
 public class ProductController {
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Operation(summary = "Busca no banco de dados todos os produtos com nome e preço", method = "GET")
     @ApiResponses(value = {
@@ -44,8 +49,15 @@ public class ProductController {
     @PostMapping
     @Transactional
     public ResponseEntity saveProduct(@RequestBody RequestProductoDTO data){
-        productService.saveProduct(data);
+        var product = new Product(data);
+        productRepository.save(product);
         return ResponseEntity.ok().build();
     }
+
+
+//    public ResponseEntity saveProduct(@RequestBody RequestProductoDTO data){
+//        productService.saveProduct(data);
+//        return ResponseEntity.ok().build();
+//    }
 
 }
