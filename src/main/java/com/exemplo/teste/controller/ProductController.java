@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -45,8 +46,12 @@ public class ProductController {
         return ResponseEntity.ok(responseProductDTO);
     }
 
+    @Operation(summary = "Realiza o cadastro de um produto", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cadastro realizado com sucesso")
+    })
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON)
     @Transactional
     public ResponseEntity saveProduct(@RequestBody RequestProductoDTO data){
         var product = new Product(data);
