@@ -51,18 +51,11 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "Cadastro realizado com sucesso")
     })
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON)
+    @PostMapping
     @Transactional
     public ResponseEntity saveProduct(@RequestBody RequestProductoDTO data){
-        var product = new Product(data);
-        productRepository.save(product);
+        productService.saveProduct(data);
         return ResponseEntity.ok().build();
     }
-
-
-//    public ResponseEntity saveProduct(@RequestBody RequestProductoDTO data){
-//        productService.saveProduct(data);
-//        return ResponseEntity.ok().build();
-//    }
 
 }
